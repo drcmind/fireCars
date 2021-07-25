@@ -1,4 +1,6 @@
+import 'package:fire_cars/models/carModel.dart';
 import 'package:fire_cars/services/authServices.dart';
+import 'package:fire_cars/services/dbServices.dart';
 import 'package:fire_cars/views/detail/carDetail.dart';
 import 'package:fire_cars/views/profile/profile.dart';
 import 'package:fire_cars/views/wrapper.dart';
@@ -11,11 +13,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(StreamProvider<User?>.value(
-    initialData: null,
-    value: AuthService().user,
-    child: MyApp(),
-  ));
+  runApp(MultiProvider(providers: [
+    StreamProvider<User?>.value(
+      initialData: null,
+      value: AuthService().user,
+    ),
+    StreamProvider<List<Car>>.value(
+        initialData: [], value: DatabaseService().cars)
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
