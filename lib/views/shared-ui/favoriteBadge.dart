@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 class FavoriteBadge extends StatefulWidget {
   final Car? car;
   final String? userID;
-  final bool? isMyFavoriteCar;
-  FavoriteBadge({this.car, this.userID, this.isMyFavoriteCar});
+  FavoriteBadge({this.car, this.userID});
 
   @override
   _FavoriteBadgeState createState() => _FavoriteBadgeState();
@@ -24,7 +23,7 @@ class _FavoriteBadgeState extends State<FavoriteBadge> {
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
             color: Colors.white.withOpacity(0.7),
           ),
-          child: widget.isMyFavoriteCar!
+          child: widget.car!.isMyFavoritedCar!
               ? GestureDetector(
                   onTap: () => DatabaseService()
                       .removeFavoriteCar(widget.car!, widget.userID!),

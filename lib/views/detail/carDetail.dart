@@ -11,12 +11,12 @@ class CarDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Car;
+    final car = ModalRoute.of(context)!.settings.arguments as Car;
     final _userID = Provider.of<User?>(context)!.uid;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(args.carName!, style: TextStyle(color: Colors.white)),
+        title: Text(car.carName!, style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -25,9 +25,9 @@ class CarDetail extends StatelessWidget {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          args.carUserID == _userID
+          car.carUserID == _userID
               ? IconButton(
-                  onPressed: () => onDeleteCar(context, args),
+                  onPressed: () => onDeleteCar(context, car),
                   icon: Icon(Icons.delete),
                 )
               : Container()
@@ -35,13 +35,13 @@ class CarDetail extends StatelessWidget {
       ),
       body: InteractiveViewer(
         child: Hero(
-          tag: args.carName!,
+          tag: car.carName!,
           child: Center(
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.black,
                   image: DecorationImage(
-                    image: NetworkImage(args.carUrlImg!),
+                    image: NetworkImage(car.carUrlImg!),
                   )),
             ),
           ),

@@ -20,14 +20,16 @@ class CarList extends StatelessWidget {
             final favoriteCar = snapshot.data as Car;
             if (pageName == 'Profile') {
               if (!snapshot.hasData) return Container();
-              return CarFeed(
-                  car: favoriteCar, userID: userID, isMyFavoriteCar: true);
+              favoriteCar.isMyFavoritedCar = true;
+              return CarFeed(car: favoriteCar, userID: userID);
             } else {
-              if (!snapshot.hasData)
-                return CarFeed(
-                    car: _cars[index], userID: userID, isMyFavoriteCar: false);
-              return CarFeed(
-                  car: _cars[index], userID: userID, isMyFavoriteCar: true);
+              if (!snapshot.hasData) {
+                _cars[index].isMyFavoritedCar = false;
+                return CarFeed(car: _cars[index], userID: userID);
+              } else {
+                _cars[index].isMyFavoritedCar = true;
+                return CarFeed(car: _cars[index], userID: userID);
+              }
             }
           });
     }, childCount: _cars.length));

@@ -8,8 +8,7 @@ import 'package:intl/intl.dart';
 class CarFeed extends StatelessWidget {
   final Car? car;
   final String? userID;
-  final bool? isMyFavoriteCar;
-  const CarFeed({this.car, this.userID, this.isMyFavoriteCar});
+  const CarFeed({this.car, this.userID});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,8 +32,7 @@ class CarFeed extends StatelessWidget {
                 ),
               ),
             ),
-            FavoriteBadge(
-                car: car!, userID: userID, isMyFavoriteCar: isMyFavoriteCar),
+            FavoriteBadge(car: car!, userID: userID),
           ],
         ),
         Padding(
