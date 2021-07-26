@@ -19,7 +19,9 @@ class CarDetail extends StatelessWidget {
         title: Text(args.carName!, style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
         backwardsCompatibility: false,
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.light),
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
