@@ -11,7 +11,7 @@ class CarDialog {
   User? user;
   CarDialog({this.user});
   void showCarDialog(BuildContext context, ImageSource source) async {
-    PickedFile? _pickedFile = await ImagePicker().getImage(source: source);
+    XFile? _pickedFile = await ImagePicker().pickImage(source: source);
     File _file = File(_pickedFile!.path);
     String _carName = '';
     String _formError = 'Veillez fournir le nom de la voiture';

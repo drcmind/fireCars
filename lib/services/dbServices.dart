@@ -9,6 +9,14 @@ class DatabaseService {
   CollectionReference _cars = FirebaseFirestore.instance.collection('cars');
   FirebaseStorage _storage = FirebaseStorage.instance;
 
+// upload de l'image vers Firebase Storage
+  Future<String> uploadFile(file) async {
+    Reference reference = _storage.ref().child('cars/${DateTime.now()}.png');
+    UploadTask uploadTask = reference.putFile(file);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    return await taskSnapshot.ref.getDownloadURL();
+  }
+  
   // ajout de la voiture dans la BDD
   void addCar(Car car) {
     _cars.add({
@@ -19,14 +27,6 @@ class DatabaseService {
       "carTimestamp": FieldValue.serverTimestamp(),
       "carFavoriteCount": 0,
     });
-  }
-
-  // upload de l'image vers Firebase Storage
-  Future<String> uploadFile(file) async {
-    Reference reference = _storage.ref().child('cars/${DateTime.now()}.png');
-    UploadTask uploadTask = reference.putFile(file);
-    TaskSnapshot taskSnapshot = await uploadTask;
-    return await taskSnapshot.ref.getDownloadURL();
   }
 
   // suppression de la voiture

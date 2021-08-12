@@ -11,9 +11,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _user = Provider.of<User?>(context);
-    return Builder(
-      builder: (BuildContext context) {
-        return Scaffold(
+    return Scaffold(
           body: SafeArea(
             child: CustomScrollView(slivers: [
               HomeAppBar(user: _user),
@@ -22,7 +20,5 @@ class Home extends StatelessWidget {
             ]),
           ),
         );
-      },
-    );
   }
 }

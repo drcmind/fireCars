@@ -6,24 +6,24 @@ class AuthService {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   // Connexion avec le compte gmail
-  Future<UserCredential> signInWithGoogle() async {
+   Future<UserCredential> signInWithGoogle() async {
     // Déclencher le flux d'authentification
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    final googleUser = await _googleSignIn.signIn();
 
-    // Obtenir les détails d'autorisation de la demande
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    // obtenir les détails d'autorisation de la demande
+    final googleAuth = await googleUser!.authentication;
 
-    // Créer un nouvel identifiant
+    // créer un nouvel identifiant
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    // Une fois connecté, renvoyez l'indentifiant de l'utilisateur
+    // une fois connecté, renvoyez l'indentifiant de l'utilisateur
     return await _auth.signInWithCredential(credential);
   }
 
+  // L'état de l'utilisateur en temps réel
   Stream<User?> get user => _auth.authStateChanges();
 
   // Déconnexion

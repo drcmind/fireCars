@@ -9,12 +9,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // retourne la page Accueil ou SplashScreen pour l'authentification
+    // retourne la page Accueil ou Login pour l'authentification
     final _user = Provider.of<User?>(context);
-    if (_user == null) {
-      return Login();
-    } else {
-      return Home();
-    }
+    return _user == null ? Login() : Home();
   }
 }
