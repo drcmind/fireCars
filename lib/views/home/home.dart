@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
     final _user = Provider.of<User?>(context);
     return Scaffold(
           body: SafeArea(
-            child: CustomScrollView(slivers: [
+            child: CuuserstomScrollView(slivers: [
               HomeAppBar(user: _user),
               AddCarSection(user: _user),
               CarList(pageName: 'Accueil', userID: _user!.uid)

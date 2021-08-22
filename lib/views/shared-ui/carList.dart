@@ -17,12 +17,11 @@ class CarList extends StatelessWidget {
           stream: DatabaseService(userID: userID, carID: _cars[index].carID)
               .myFavoriteCar,
           builder: (context, snapshot) {
-            final favoriteCar = snapshot.data as Car;
-            if (pageName == 'Profile') {
-              if (!snapshot.hasData) return Container();
-              favoriteCar.isMyFavoritedCar = true;
-              return CarFeed(car: favoriteCar, userID: userID);
-            } else {
+             if (pageName == 'Profile') {
+                if (!snapshot.hasData) return Container();
+                _cars[index].isMyFavoritedCar = true;
+                return CarFeed(car: _cars[index], userID: userID);
+              }
               if (!snapshot.hasData) {
                 _cars[index].isMyFavoritedCar = false;
                 return CarFeed(car: _cars[index], userID: userID);
@@ -30,7 +29,6 @@ class CarList extends StatelessWidget {
                 _cars[index].isMyFavoritedCar = true;
                 return CarFeed(car: _cars[index], userID: userID);
               }
-            }
           });
     }, childCount: _cars.length));
   }

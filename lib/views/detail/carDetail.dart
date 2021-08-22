@@ -50,7 +50,7 @@ class CarDetail extends StatelessWidget {
     );
   }
 
-  onDeleteCar(BuildContext context, Car car) {
+  void onDeleteCar(BuildContext context, Car car) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
