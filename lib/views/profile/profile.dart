@@ -1,4 +1,4 @@
-imimport 'package:fire_cars/views/profile/profileAppBar.dart';
+import 'package:fire_cars/views/profile/profileAppBar.dart';
 import 'package:fire_cars/views/shared-ui/carList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
