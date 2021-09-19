@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
   // Connexion avec le Google
   Future<UserCredential> signInWithGoogle() async {
+    if (kIsWeb) return await _auth.signInWithPopup(googleProvider);
+
     // Déclencher le flux d'authentification
     final googleUser = await _googleSignIn.signIn();
 
@@ -28,7 +32,7 @@ class AuthService {
 
   // déconnexion
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    await _auth.signOut();
+    _googleSignIn.signOut();
+    return _auth.signOut();
   }
 }

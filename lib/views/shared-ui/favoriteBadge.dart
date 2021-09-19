@@ -15,8 +15,10 @@ class _FavoriteBadgeState extends State<FavoriteBadge> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        top: 4.0,
-        right: 12.0,
+      top: 4.0,
+      right: 12.0,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
@@ -27,37 +29,49 @@ class _FavoriteBadgeState extends State<FavoriteBadge> {
               ? GestureDetector(
                   onTap: () => DatabaseService()
                       .removeFavoriteCar(widget.car!, widget.userID!),
-                  child: Row(
-                    children: [
-                      Text('${widget.car!.carFavoriteCount}',
+                  child: Tooltip(
+                    message: 'Ne plus aimer',
+                    child: Row(
+                      children: [
+                        Text(
+                          '${widget.car!.carFavoriteCount}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
-                          )),
-                      Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      )
-                    ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      ],
+                    ),
                   ),
                 )
               : GestureDetector(
                   onTap: () => DatabaseService()
                       .addFavoriteCar(widget.car!, widget.userID!),
-                  child: Row(
-                    children: [
-                      widget.car!.carFavoriteCount! > 0
-                          ? Text('${widget.car?.carFavoriteCount}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ))
-                          : Container(),
-                      Icon(
-                        Icons.favorite,
-                      )
-                    ],
+                  child: Tooltip(
+                    message: 'Aimer',
+                    child: Row(
+                      children: [
+                        widget.car!.carFavoriteCount! > 0
+                            ? Text(
+                                '${widget.car?.carFavoriteCount}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Container(),
+                        Icon(
+                          Icons.favorite,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-        ));
+        ),
+      ),
+    );
   }
 }

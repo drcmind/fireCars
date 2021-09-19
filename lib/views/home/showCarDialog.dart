@@ -5,6 +5,7 @@ import 'package:fire_cars/services/dbServices.dart';
 import 'package:fire_cars/views/shared-ui/showSnackBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,21 +23,24 @@ class CarDialog {
     showDialog(
         context: context,
         builder: (BuildContext context) {
+          final mobilHeight = MediaQuery.of(context).size.height * 0.25;
+          final webHeight = MediaQuery.of(context).size.height * 0.5;
           return SimpleDialog(
             contentPadding: EdgeInsets.zero,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: kIsWeb ? webHeight : mobilHeight,
                 margin: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
-                    color: Colors.grey,
-                    image: DecorationImage(
-                      image: FileImage(_file),
-                      fit: BoxFit.cover,
-                    )),
+                color: Colors.grey,
+                child: kIsWeb
+                    ? Image(
+                        image: NetworkImage(_file.path),
+                        fit: BoxFit.cover,
+                      )
+                    : Image(
+                        image: FileImage(_file),
+                        fit: BoxFit.cover,
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -59,13 +63,16 @@ class CarDialog {
                       alignment: Alignment.centerRight,
                       child: Wrap(
                         children: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text('ANNULER'),
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('ANNULER'),
+                            ),
                           ),
                           ElevatedButton(
-                            onPressed: () => onSubmit(
-                                context, _keyForm, _file, _carName, user),
+                            onPressed: () => onSubmit(context, _keyForm, _file,
+                                _pickedFile, _carName, user),
                             child: Text('PUBLIER'),
                           )
                         ],
@@ -79,17 +86,23 @@ class CarDialog {
         });
   }
 
-  void onSubmit(context, keyForm, file, carName, user) async {
+  void onSubmit(context, keyForm, file, fileWeb, carName, user) async {
     if (keyForm.currentState!.validate()) {
       Navigator.of(context).pop();
       showNotification(context, "Chargement...");
-      DatabaseService db = DatabaseService();
-      String _carUrlImg = await db.uploadFile(file);
-      db.addCar(Car(
-          carName: carName,
-          carUrlImg: _carUrlImg,
-          carUserID: user!.uid,
-          carUserName: user!.displayName));
+      try {
+        DatabaseService db = DatabaseService();
+        String _carUrlImg = await db.uploadFile(file, fileWeb);
+        db.addCar(
+          Car(
+              carName: carName,
+              carUrlImg: _carUrlImg,
+              carUserID: user!.uid,
+              carUserName: user!.displayName),
+        );
+      } catch (error) {
+        showNotification(context, "Erreur $error");
+      }
     }
   }
 }

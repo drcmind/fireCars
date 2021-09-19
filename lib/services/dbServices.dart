@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_cars/models/carModel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DatabaseService {
   String? userID, carID;
@@ -9,14 +14,18 @@ class DatabaseService {
   CollectionReference _cars = FirebaseFirestore.instance.collection('cars');
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-// upload de l'image vers Firebase Storage
-  Future<String> uploadFile(file) async {
+  // upload de l'image vers Firebase Storage
+  Future<String> uploadFile(File file, XFile fileWeb) async {
     Reference reference = _storage.ref().child('cars/${DateTime.now()}.png');
-    UploadTask uploadTask = reference.putFile(file);
+    Uint8List imageTosave = await fileWeb.readAsBytes();
+    SettableMetadata metaData = SettableMetadata(contentType: 'image/jpeg');
+    UploadTask uploadTask = kIsWeb
+        ? reference.putData(imageTosave, metaData)
+        : reference.putFile(file);
     TaskSnapshot taskSnapshot = await uploadTask;
     return await taskSnapshot.ref.getDownloadURL();
   }
-  
+
   // ajout de la voiture dans la BDD
   void addCar(Car car) {
     _cars.add({
@@ -82,7 +91,7 @@ class DatabaseService {
     final favoritedBy = _cars.doc(carID).collection('favoritedBy');
     return favoritedBy.doc(userID).snapshots().map((doc) {
       return Car(
-        carID: carID,
+        carID: doc.id,
         carName: doc.get('carName'),
         carUrlImg: doc.get('carUrlImg'),
         carUserID: doc.get('carUserID'),
@@ -91,5 +100,18 @@ class DatabaseService {
         carTimestamp: doc.get('carTimestamp'),
       );
     });
+  }
+
+  Future<Car> singleCar(String carID) async {
+    final doc = await _cars.doc(carID).get();
+    return Car(
+      carID: carID,
+      carName: doc.get('carName'),
+      carUrlImg: doc.get('carUrlImg'),
+      carUserID: doc.get('carUserID'),
+      carUserName: doc.get('carUserName'),
+      carFavoriteCount: doc.get('carFavoriteCount'),
+      carTimestamp: doc.get('carTimestamp'),
+    );
   }
 }

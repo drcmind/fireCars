@@ -1,9 +1,11 @@
+import 'package:beamer/beamer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_cars/models/carModel.dart';
 import 'package:fire_cars/views/shared-ui/favoriteBadge.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import "package:hovering/hovering.dart";
 
 class CarFeed extends StatelessWidget {
   final Car? car;
@@ -17,18 +19,22 @@ class CarFeed extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () =>
-                  Navigator.pushNamed(context, '/detail', arguments: car!),
+                  Beamer.of(context).beamToNamed('/detail/${car!.carID}'),
               child: Hero(
                 tag: car!.carName!,
-                child: Container(
+                child: HoverAnimatedContainer(
                   height: MediaQuery.of(context).size.height * 0.35,
                   margin: EdgeInsets.symmetric(horizontal: 8.0),
+                  hoverMargin: EdgeInsets.symmetric(horizontal: 2.0),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      color: Colors.grey,
-                      image: DecorationImage(
-                          image: NetworkImage(car!.carUrlImg!),
-                          fit: BoxFit.cover)),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    color: Colors.grey,
+                    image: DecorationImage(
+                      image: NetworkImage(car!.carUrlImg!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: MouseRegion(cursor: SystemMouseCursors.click),
                 ),
               ),
             ),

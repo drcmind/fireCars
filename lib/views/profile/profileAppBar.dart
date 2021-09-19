@@ -11,45 +11,73 @@ class ProfileAppBar extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: MediaQuery.of(context).size.height * 0.40,
       pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Hero(
-            tag: user!.photoURL!,
-            child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: NetworkImage(user!.photoURL!),
-                fit: BoxFit.cover,
-              )),
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [Colors.white, Colors.transparent],
-                  begin: Alignment.bottomRight,
-                )),
-              ),
-            )),
-        title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(children: [
+      title: RichText(
+        text: TextSpan(
+          children: [
             TextSpan(
               text: '${user!.displayName}\n',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             TextSpan(
               text: '${user!.email}',
               style: Theme.of(context).textTheme.caption!.copyWith(
                     color: Colors.black,
                   ),
-            )
-          ]),
+            ),
+          ],
         ),
-        titlePadding: EdgeInsets.only(left: 46.0, bottom: 8.0),
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Hero(
+          tag: user!.photoURL!,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(user!.photoURL!),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.white, Colors.transparent],
+                  begin: Alignment.topLeft,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      leading: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(left: 8.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey[300],
+        ),
+        child: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back),
+          tooltip: 'Retour vers la page accueil',
+        ),
       ),
       actions: [
-        IconButton(onPressed: () => signOut(context), icon: Icon(Icons.logout))
+        Container(
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(right: 8.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.grey[300],
+          ),
+          child: IconButton(
+            onPressed: () => signOut(context),
+            icon: Icon(Icons.logout),
+            tooltip: 'Deconnectez-vous',
+          ),
+        ),
       ],
     );
   }
